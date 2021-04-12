@@ -16,7 +16,10 @@ limitations under the License.
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/kyokomi/emoji/v2"
@@ -43,10 +46,46 @@ var randomCmd = &cobra.Command{
 func getRandomJoke() {
 	fmt.Println("Here is your Joke")
 	emoji.Println(":beer::beer:Beer!!!")
+	url := "https://icanhazdadjoke.com/"
+
+	responseBytes := getJokeData(url)
+
+	joke := RandomJoke{}
+
+	if err := json.Unmarshal(responseBytes, &joke); err != nil {
+		fmt.Printf("Could not unmarshal reponseBytes. %v", err)
+	}
+
+	fmt.Println(string(joke.Joke))
 }
 
-func getJokeData(basAPI String) []byte {
-	req, err = http.NewRequest()
+// I have no clue how to do this, copy pasting the code for http
+
+func getJokeData(baseAPI string) []byte {
+	request, err := http.NewRequest(
+		http.MethodGet, //method
+		baseAPI,        //url
+		nil,            //body
+	)
+	if err != nil {
+		log.Printf("Could not request a dadjoke. %v", err)
+	}
+	request.Header.Add("Accept", "application/json")
+	request.Header.Add("User-Agent", "Ranjith KA (https://github.com/ranjith-ka/Docker)")
+
+	response, err := http.DefaultClient.Do(request)
+
+	if err != nil {
+		log.Printf("Could not make a request. %v", err)
+	}
+	defer response.Body.Close()
+	responseBytes, err := ioutil.ReadAll(response.Body)
+
+	if err != nil {
+		log.Printf("Could not read response body. %v", err)
+	}
+
+	return responseBytes
 }
 
 func init() {
