@@ -6,3 +6,4 @@
 *.tgz
 *.lock
 *_tmp
+app/canary/jsm_gofullcouse/jsm.go
