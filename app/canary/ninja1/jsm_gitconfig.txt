@@ -1,0 +1,70 @@
+[alias]
+  bw = blame -w -M
+  b = branch
+  r = reset --hard HEAD
+  c = commit
+  commend = commit --amend --no-edit
+  cc = commit --all --amend --no-edit
+  ca = commit --all
+  co = checkout
+  cb = "!f() { git co `git log --until=\"$*\" -1 --format=%h`; } ; f"
+  s = status --short
+  d = diff
+  dc = diff --cached --word-diff=color
+  dw = diff --word-diff=color
+  l = log
+  a = add
+  af = add -f
+  p = push
+  please = push --force-with-lease
+  dt = difftool
+  mt = mergetool
+  ss = show -1 --format=%B--stat
+  sw = show -1 --format=%B--stat --word-diff=color
+  whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
+  lg = log --graph --pretty=format:'%Cred%h%Creset %C(yellow)%an%d%Creset %s [%N] %Cgreen(%ar)%Creset' --date=relative
+  lgd = log --graph --pretty=format:'%Cred%h%Creset %C(yellow)%an%d%Creset %s [%N] %Cgreen(%ar)%Creset' --date=default
+  lgm = log --graph --pretty=format:'%Cred%h%Creset %C(yellow)%an%d%Creset %s [%N] %Cgreen(%ar)%Creset' --date=relative --author=singamchettyjaswant143@gmail.com
+  abbr = "!sh -c 'git rev-list --all | grep ^$1 | while read commit; do git --no-pager log -n1 --pretty=format:\"%H %ci %an %s%n\" $commit; done' -"
+  refeature = "!f() { git co develop && git pull && git co $1 && git rebase develop; } ; f"
+  ffmerge = "!f() { git refeature $1 && git co develop && git merge $1; } ; f"
+  clearbranch = "!f() { git branch -d $1 && git push origin :$1; } ; f"
+  addtag = "!f() { git tag -l | xargs git tag -d && git fetch -p && git tag $1; } ; f"
+  ptags = push origin --tags
+  dtags = "!f() { git tag -d $1 && git push origin :refs/tags/$1; } ; f"
+[color]
+  ui = always
+[core]
+  pager = less -x1,5
+  fileMode = true
+  editor = vim
+	autocrlf = input
+  whitespace = cr-at-eol
+	ignorecase = true
+[push]
+  default = current
+[branch]
+	autosetuprebase = remote
+[merge]
+  tool = vimdiff
+  guitool = gvimdiff
+  conflictstyle = diff3
+[mergetool]
+  prompt = false
+[diff]
+  tool = vimdiff
+  guitool = gvimdiff
+[difftool]
+  prompt = false
+
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+[log]
+	mailmap = true
+
+[user]
+	name = jaswant
+  email = singamchettyjaswant143@gmail.com
